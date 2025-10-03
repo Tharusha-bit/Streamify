@@ -3,6 +3,7 @@ import { ShipWheelIcon } from "lucide-react";
 import { Link } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signup } from "../lib/api";
+import useSignup from "../hooks/useSignup";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -11,18 +12,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const queryClient = useQueryClient();
-
-  const {
-    mutate: signupMutation,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: signup,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
+  const { isPending, error, signupMutation } = useSignup();
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -147,11 +137,11 @@ const SignUpPage = () => {
                 <button className="btn btn-primary w-full" type="submit">
                   {isPending ? (
                     <>
-                    <span className="loading loading-spinner loading-xs">
-                      Loading...
-                    </span>
+                      <span className="loading loading-spinner loading-xs">
+                        Loading...
+                      </span>
                     </>
-                  ):(
+                  ) : (
                     "Create Account"
                   )}
                 </button>
